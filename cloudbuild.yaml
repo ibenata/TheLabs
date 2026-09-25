@@ -1,0 +1,22 @@
+steps:
+  - name: 'docker.io/library/golang:latest'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        wget -q https://github.com/gohugoio/hugo/releases/download/v0.166.0/hugo_extended_0.166.0_linux-amd64.tar.gz
+        tar -xzf hugo_extended_0.166.0_linux-amd64.tar.gz
+        mv hugo /usr/local/bin/hugo
+        hugo version
+        cd hugo
+        hugo --minify
+
+  - name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:latest'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud storage rsync hugo/public gs://thelabs-bucket --recursive --delete-unmatched-destination-objects
+
+options:
+  logging: CLOUD_LOGGING_ONLY
