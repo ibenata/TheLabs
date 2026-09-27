@@ -16,7 +16,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud storage rsync hugo/public gs://thelabs-bucket --recursive --delete-unmatched-destination-objects
+        gcloud storage rsync hugo/public gs://thelabs-bucket1 --recursive --delete-unmatched-destination-objects
 
 options:
   logging: CLOUD_LOGGING_ONLY
