@@ -1,4 +1,11 @@
 steps:
+  - name: 'python:3.12-slim'
+    entrypoint: 'python'
+    env:
+      - 'WORDPRESS_URL=http://35.195.242.103'
+    args:
+      - 'scripts/import-wordpress.py'
+
   - name: 'docker.io/library/golang:latest'
     entrypoint: 'bash'
     args:

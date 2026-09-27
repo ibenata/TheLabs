@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} - {{ .Site.Title }}</title>
+</head>
+
+<body>
+    <main>
+        <p><a href="{{ "/" | relURL }}">← Back to The Lab</a></p>
+
+        <article>
+            <h1>{{ .Title }}</h1>
+
+            <p><small>{{ .Date.Format "January 2, 2006" }}</small></p>
+
+            <div>
+                {{ .Content }}
+            </div>
+        </article>
+    </main>
+</body>
+</html>

@@ -1,4 +1,11 @@
-baseURL = 'https://example.org/'
-locale = 'en-us'
-title = 'My New Hugo Project'
-theme= 'thelabsTheme'
+﻿baseURL = 'http://localhost:1313/'
+languageCode = 'en-us'
+title = 'The Lab'
+
+[params]
+  description = 'Expert insights from around the world'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
