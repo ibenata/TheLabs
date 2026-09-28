@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,15 +12,15 @@
 
         <p>{{ .Site.Params.description }}</p>
 
-        <h2>Pages detected by Hugo</h2>
-
-        <p>Total regular pages: {{ len .Site.RegularPages }}</p>
+        <h2>Latest articles</h2>
 
         {{ range .Site.RegularPages }}
             <article>
-                <h3>{{ .Title }}</h3>
-                <p>Section: {{ .Section }}</p>
-                <p>URL: {{ .RelPermalink }}</p>
+                <h3>
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                </h3>
+
+                <p>{{ .Summary }}</p>
             </article>
         {{ end }}
     </main>
