@@ -1,0 +1,13 @@
+# Hugo generated output
+hugo/public/
+
+# Hugo build lock
+hugo/.hugo_build.lock
+
+# WordPress-generated Hugo content
+hugo/content/posts/wp-*.md
+
+# Local OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/

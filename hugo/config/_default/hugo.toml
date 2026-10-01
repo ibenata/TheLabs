@@ -1,0 +1,7 @@
+baseURL = "http://localhost:1313/"
+languageCode = "en"
+title = "The Labs"
+theme = "blowfish"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

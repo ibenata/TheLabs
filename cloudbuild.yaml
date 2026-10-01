@@ -1,12 +1,39 @@
 steps:
-  - name: 'python:3.12-slim'
-    entrypoint: 'python'
-    env:
-      - 'WORDPRESS_URL=http://35.195.242.103'
-    args:
-      - 'scripts/import-wordpress.py'
 
-  - name: 'docker.io/library/golang:latest'
+  # ---------------------------------------------------------
+  # 0. Initialize Blowfish Git submodule
+  # ---------------------------------------------------------
+  - name: 'gcr.io/cloud-builders/git'
+    id: init-submodules
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        git submodule update --init --recursive
+
+
+  # ---------------------------------------------------------
+  # 1. Synchronize published WordPress posts
+  # ---------------------------------------------------------
+  - name: 'python:3.12-slim'
+    id: sync-wordpress
+    dir: hugo
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install --no-cache-dir requests
+        python scripts/sync_wordpress.py
+    env:
+      - 'WP_BASE_URL=$_WP_BASE_URL'
+
+
+  # ---------------------------------------------------------
+  # 2. Build Hugo / Blowfish
+  # ---------------------------------------------------------
+  - name: 'golang:latest'
+    id: build-hugo
+    dir: hugo
     entrypoint: 'bash'
     args:
       - '-c'
@@ -17,16 +44,30 @@ steps:
         mv /tmp/hugo-install/hugo /usr/local/bin/hugo
 
         hugo version
-
-        cd hugo
         hugo --minify
 
-  - name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:latest'
+
+  # ---------------------------------------------------------
+  # 3. Deploy generated static website to GCS
+  # ---------------------------------------------------------
+  - name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli'
+    id: deploy
+    dir: hugo
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud storage rsync hugo/public gs://thelabs-bucket1 --recursive --delete-unmatched-destination-objects
+        gcloud storage rsync public gs://thelabs-bucket1 \
+          --recursive \
+          --delete-unmatched-destination-objects
+
+
+substitutions:
+  _WP_BASE_URL: 'http://35.195.242.103'
+
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+
+timeout: 1200s
